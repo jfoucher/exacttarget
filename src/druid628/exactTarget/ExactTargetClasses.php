@@ -135,10 +135,7 @@ class EtResultMessage extends EtBaseClass {
   public $RequestObjectType;     // String
 }
 
-class EtCreateRequest extends EtBaseClass {
-  public $Options; // EtCreateOptions
-  public $Objects; // EtAPIObject
-}
+
 
 class EtCreateResult extends EtBaseClass {
   public $NewID;              // int
@@ -1299,6 +1296,10 @@ class EtFieldMap extends EtBaseClass {
   public $SourceOrdinal; // int
   public $DestinationName; // String
 }
+
+
+
+
 
 class EtImportDefinition extends EtBaseClass {
   public $AllowErrors; // boolean

@@ -84,6 +84,22 @@ class WSSESoap {
 		}
 	}
 
+    // This section was added in order to be able to handle passing the Internal oAuth Token for ExactTarget Email SOAP API
+    public function addOAuth($token) {
+        $headers = $this->SOAPXPath->query('//wssoap:Envelope/wssoap:Header');
+        $header = $headers->item(0);
+        if (! $header) {
+            $header = $this->soapDoc->createElementNS($this->soapNS, $this->soapPFX.':Header');
+            $this->envelope->insertBefore($header, $this->envelope->firstChild);
+        }
+
+        $authnode = $this->soapDoc->createElementNS('http://exacttarget.com', 'oAuth');
+        $header->appendChild($authnode);
+
+        $oauthtoken = $this->soapDoc->createElementNS(null,'oAuthToken',$token);
+        $authnode->appendChild($oauthtoken);
+    }
+
 	public function addUserToken($userName, $password=NULL, $passwordDigest=FALSE) {
 		if ($passwordDigest && empty($password)) {
 			throw new Exception("Cannot calculate the digest without a password");

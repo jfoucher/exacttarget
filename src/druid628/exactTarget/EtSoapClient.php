@@ -19,6 +19,7 @@ use druid628\exactTarget\lib\WSSESoap;
 class EtSoapClient extends \SoapClient {
     public $username = NULL;
     public $password = NULL;
+    public $authtoken = NULL;
 
     function __doRequest($request, $location, $saction, $version, $one_way = 0) {
         $doc = new \DOMDocument();
@@ -27,6 +28,11 @@ class EtSoapClient extends \SoapClient {
         $objWSSE = new WSSESoap($doc);
 
         $objWSSE->addUserToken($this->username, $this->password, FALSE);
+
+        if ($this->authtoken != null){
+            $token = $this->authtoken;
+            $objWSSE->addOAuth($token);
+        }
 
         return parent::__doRequest($objWSSE->saveXML(), $location, $saction, $version, $one_way);
    }

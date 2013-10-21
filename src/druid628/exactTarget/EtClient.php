@@ -5,6 +5,8 @@ namespace druid628\exactTarget;
 use druid628\exactTarget\EtBaseClass;
 use druid628\exactTarget\EtSoapClient;
 use druid628\exactTarget\EtSubscriber;
+use druid628\exactTarget\EtTemplate;
+use druid628\exactTarget\EtCreateRequest;
 use druid628\exactTarget\EtSimpleOperators;
 use druid628\exactTarget\EtTriggeredSend;
 use druid628\exactTarget\EtTriggeredSendDefinition;
@@ -58,7 +60,7 @@ class EtClient extends EtBaseClass {
 	
 
 
-        public function __construct($username, $password, $serverinstance = 's4') {
+        public function __construct($username, $password, $authtoken, $serverinstance = 's6') {
                   
                  if($serverinstance != '')
                  {
@@ -70,6 +72,7 @@ class EtClient extends EtBaseClass {
                 $this->client = new EtSoapClient($this->wsdl, array('trace' => 1));
                 $this->client->username = $username;
                 $this->client->password = $password;
+                $this->client->authtoken = $authtoken;
         }
 
         /**
@@ -91,7 +94,9 @@ class EtClient extends EtBaseClass {
                         if (method_exists($this, $verb)) {
                                 $className = sprintf("Et%s", $className);
                                 if (class_exists(sprintf(__NAMESPACE__ . "\%s", $className))) {
-                                        return call_user_func_array(array($this, $verb), array_merge(array($className), $arguments));
+                                    $a = array_merge(array($className), $arguments);
+                                    $r = call_user_func_array(array($this, $verb), $a);
+                                    return $r;
                                 } else {
                                         throw new \Exception("Class ($className) Not Found");
                                 }
